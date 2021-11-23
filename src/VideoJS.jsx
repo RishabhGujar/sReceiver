@@ -6,9 +6,8 @@ const VideoJS = (props) => {
   const videoRef = React.useRef(null);
   const playerRef = React.useRef(null);
   const { options, onReady, handleData } = props;
-  const [mute, setMute] = useState(false);
-  const [controlData, setControlData] = useState({});
   const [seekData, setSeekData] = useState(0);
+  const [volume, setVolume] = useState(30);
 
   useEffect(() => {
     let connectionIdx = 0;
@@ -22,8 +21,26 @@ const VideoJS = (props) => {
           handleData(response);
         } else if (response.seekData) {
           setSeekData(response.seekData);
+        } else if (response.volumeData) {
+          setVolume(response.volumeData);
         } else {
-          setControlData(response);
+          const player = playerRef.current ? playerRef.current : null;
+          switch (response.controlMessage) {
+            case "play":
+              player.play();
+              break;
+            case "pause":
+              player.pause();
+              break;
+            case "mute":
+              player.muted(true);
+              break;
+            case "unmute":
+              player.muted(false);
+              break;
+            default:
+              break;
+          }
         }
 
         console.log(response);
@@ -38,7 +55,7 @@ const VideoJS = (props) => {
         });
       });
     }
-  });
+  }, [handleData]);
 
   React.useEffect(() => {
     // make sure Video.js player is only initialized once
@@ -68,38 +85,19 @@ const VideoJS = (props) => {
       }
     };
   }, [playerRef]);
-
-  useEffect(() => {
-    const player = playerRef.current;
-    switch (controlData.controlMessage) {
-      case "play":
-        player.play();
-
-        break;
-      case "pause":
-        player.pause();
-
-        break;
-      case "mute":
-        player.muted(!mute);
-        setMute((mute) => !mute);
-
-        break;
-      case "fullscreen":
-        player.requestFullscreen();
-        break;
-
-      default:
-        break;
-    }
-  }, [controlData, mute]);
-
   useEffect(() => {
     const player = playerRef.current;
     if (player) {
       player.currentTime(seekData);
     }
   }, [seekData]);
+
+  useEffect(() => {
+    const player = playerRef.current;
+    if (player) {
+      player.volume(volume);
+    }
+  }, [volume]);
 
   return (
     <div data-vjs-player>

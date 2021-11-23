@@ -13,7 +13,7 @@ export default function App() {
   const videoJsOptions = {
     // lookup the options in the docs for more options
     autoplay: false,
-    controls: true,
+    controls: false,
     responsive: true,
     fluid: true,
     poster:
