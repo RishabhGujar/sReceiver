@@ -1,15 +1,8 @@
 import React from "react";
 import VideoJS from "./VideoJS";
-import { useState } from "react";
 
 export default function App() {
-  const [data, setData] = useState({
-    message:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-  });
-
   const playerRef = React.useRef(null);
-
   const videoJsOptions = {
     // lookup the options in the docs for more options
     autoplay: false,
@@ -21,12 +14,11 @@ export default function App() {
 
     sources: [
       {
-        src: `${data.message}`,
+        src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
         type: "video/mp4",
       },
     ],
   };
-
   const handlePlayerReady = (player) => {
     playerRef.current = player;
 
@@ -40,17 +32,9 @@ export default function App() {
     });
   };
 
-  const handleData = (response) => {
-    setData(response);
-  };
-
   return (
     <div>
-      <VideoJS
-        options={videoJsOptions}
-        onReady={handlePlayerReady}
-        handleData={handleData}
-      />
+      <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
     </div>
   );
 }

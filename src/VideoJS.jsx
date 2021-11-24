@@ -1,30 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 
 const VideoJS = (props) => {
   const videoRef = React.useRef(null);
   const playerRef = React.useRef(null);
-  const { options, onReady, handleData } = props;
-  const [seekData, setSeekData] = useState(0);
-  const [volume, setVolume] = useState(30);
+  const { options, onReady } = props;
 
   useEffect(() => {
     let connectionIdx = 0;
-
     function addConnection(connection) {
       connection.connectionId = ++connectionIdx;
       console.log(connectionIdx);
+      const player = playerRef.current ? playerRef.current : null;
       connection.addEventListener("message", function (event) {
         const response = JSON.parse(event.data);
         if (response.message) {
-          handleData(response);
+          player.src(response.message);
         } else if (response.seekData) {
-          setSeekData(response.seekData);
+          player.currentTime(response.seekData);
         } else if (response.volumeData) {
-          setVolume(response.volumeData);
+          player.volume(response.volumeData);
         } else {
-          const player = playerRef.current ? playerRef.current : null;
           switch (response.controlMessage) {
             case "play":
               player.play();
@@ -55,7 +52,7 @@ const VideoJS = (props) => {
         });
       });
     }
-  }, [handleData]);
+  }, []);
 
   React.useEffect(() => {
     // make sure Video.js player is only initialized once
@@ -85,19 +82,6 @@ const VideoJS = (props) => {
       }
     };
   }, [playerRef]);
-  useEffect(() => {
-    const player = playerRef.current;
-    if (player) {
-      player.currentTime(seekData);
-    }
-  }, [seekData]);
-
-  useEffect(() => {
-    const player = playerRef.current;
-    if (player) {
-      player.volume(volume);
-    }
-  }, [volume]);
 
   return (
     <div data-vjs-player>
