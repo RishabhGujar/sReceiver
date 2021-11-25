@@ -5,9 +5,9 @@ export default function App() {
   const playerRef = React.useRef(null);
   const videoJsOptions = {
     // lookup the options in the docs for more options
-    autoplay: false,
     responsive: true,
     fluid: true,
+    autoplay: true,
     poster:
       "https://mango.blender.org/wp-content/uploads/2012/09/tos-poster-540x800.jpg",
     sources: [
