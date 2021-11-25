@@ -66,7 +66,7 @@ const VideoJS = (props) => {
         console.log("player is ready");
         onReady && onReady(player);
       }));
-      console.log(player);
+      player.fill(true);
     } else {
       const player = playerRef.current;
       player.src(options.sources);

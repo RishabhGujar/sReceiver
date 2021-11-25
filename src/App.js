@@ -6,15 +6,13 @@ export default function App() {
   const videoJsOptions = {
     // lookup the options in the docs for more options
     autoplay: false,
-    controls: true,
     responsive: true,
     fluid: true,
     poster:
       "https://mango.blender.org/wp-content/uploads/2012/09/tos-poster-540x800.jpg",
-
     sources: [
       {
-        src: "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
+        src: "https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8",
         type: "application/x-mpegURL",
       },
     ],
