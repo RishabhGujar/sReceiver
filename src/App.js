@@ -6,15 +6,15 @@ export default function App() {
   const videoJsOptions = {
     // lookup the options in the docs for more options
     autoplay: false,
-    controls: false,
+    controls: true,
     responsive: true,
     fluid: true,
     poster:
-      "https://upload.wikimedia.org/wikipedia/commons/8/8f/Sintel_poster.jpg",
+      "https://mango.blender.org/wp-content/uploads/2012/09/tos-poster-540x800.jpg",
 
     sources: [
       {
-        src: "https://multiplatform-f.akamaihd.net/i/multi/april11/sintel/sintel-hd_,512x288_450_b,640x360_700_b,768x432_1000_b,1024x576_1400_m,.mp4.csmil/master.m3u8",
+        src: "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
         type: "application/x-mpegURL",
       },
     ],
@@ -33,7 +33,7 @@ export default function App() {
   };
 
   return (
-    <div>
+    <div style={{ height: "100vh", width: "100vw" }}>
       <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
     </div>
   );

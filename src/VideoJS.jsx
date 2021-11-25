@@ -20,7 +20,9 @@ const VideoJS = (props) => {
         } else if (response.seekData) {
           player.currentTime(response.seekData);
         } else if (response.volumeData) {
-          player.volume(response.volumeData);
+          response.volumeData === "0"
+            ? player.muted(true)
+            : player.volume(response.volumeData);
         } else {
           switch (response.controlMessage) {
             case "play":
