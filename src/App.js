@@ -7,7 +7,6 @@ export default function App() {
     // lookup the options in the docs for more options
     responsive: true,
     fluid: true,
-    autoplay: true,
     poster:
       "https://mango.blender.org/wp-content/uploads/2012/09/tos-poster-540x800.jpg",
     sources: [
@@ -17,7 +16,7 @@ export default function App() {
       },
     ],
   };
-  const handlePlayerReady = (player) => {
+  const handlePlayerReady = (player, presentationConnection) => {
     playerRef.current = player;
 
     // you can handle player events here
@@ -27,6 +26,33 @@ export default function App() {
 
     player.on("dispose", () => {
       console.log("player will dispose");
+      if (presentationConnection) {
+        console.log("message sent");
+        presentationConnection.send(JSON.stringify({ currentTime: `stop` }));
+      }
+    });
+    player.on("play", () => {
+      console.log("start playing");
+      if (presentationConnection) {
+        console.log("message sent");
+        presentationConnection.send(
+          JSON.stringify({ currentTime: `${Math.floor(player.currentTime())}` })
+        );
+      }
+    });
+
+    player.on("pause", () => {
+      if (presentationConnection) {
+        console.log("message sent");
+        presentationConnection.send(JSON.stringify({ currentTime: `stop` }));
+      }
+    });
+
+    player.on("ended", () => {
+      if (presentationConnection) {
+        console.log("message sent");
+        presentationConnection.send(JSON.stringify({ currentTime: `ended` }));
+      }
     });
   };
 

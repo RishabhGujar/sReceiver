@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
-
+let presentationConnection;
 const VideoJS = (props) => {
   const videoRef = React.useRef(null);
   const playerRef = React.useRef(null);
@@ -12,6 +12,7 @@ const VideoJS = (props) => {
     function addConnection(connection) {
       connection.connectionId = ++connectionIdx;
       console.log(connectionIdx);
+      presentationConnection = connection;
       const player = playerRef.current ? playerRef.current : null;
       connection.addEventListener("message", function (event) {
         const response = JSON.parse(event.data);
@@ -64,7 +65,7 @@ const VideoJS = (props) => {
 
       const player = (playerRef.current = videojs(videoElement, options, () => {
         console.log("player is ready");
-        onReady && onReady(player);
+        onReady && onReady(player, presentationConnection);
       }));
       player.fill(true);
     } else {
